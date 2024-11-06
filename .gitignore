@@ -6,3 +6,9 @@
 
 # Ignore general temp or build files
 **/node_modules/
+
+# Keep environment variables out of version control
+**.env
+
+# Ignore SQLite database files
+**.db
