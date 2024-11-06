@@ -13,5 +13,49 @@ export const buildingResolvers = {
         where: { id },
       });
     },
-  }
+  },
+  Mutation: {
+    async createBuilding(
+      _: unknown,
+      args: { name?: string; address: string; currentTemperature: number; temperatureScale: string }
+    ) {
+      const { name, address, currentTemperature, temperatureScale } = args;
+      return await prisma.building.create({
+        data: {
+          name,
+          address,
+          currentTemperature,
+          temperatureScale,
+        },
+      });
+    },
+
+    async updateBuilding(
+      _: unknown,
+      args: { id: number; name?: string; address?: string; currentTemperature?: number; temperatureScale?: string }
+    ) {
+      const { id, name, address, currentTemperature, temperatureScale } = args;
+
+      return await prisma.building.update({
+        where: { id },
+        data: {
+          ...(name && { name }),
+          ...(address && { address }),
+          ...(currentTemperature && { currentTemperature }),
+          ...(temperatureScale && { temperatureScale }),
+        },
+      });
+    },
+
+    async deleteBuilding(
+      _: unknown,
+      args: { id: number }
+    ) {
+      const { id } = args;
+
+      return await prisma.building.delete({
+        where: { id },
+      });
+    },
+  },
 };
