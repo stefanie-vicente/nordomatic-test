@@ -14,9 +14,25 @@ datasource db {
 }
 
 model Building {
-  id      Int    @id @default(autoincrement())
-  name   String?
-  address String
+  id                  Int                  @id @default(autoincrement())
+  name                String?
+  address             String
+  currentTemperature  Float                
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  temperatureScale    String 
+  temperatureRecords  TemperatureRecords[]              
 
-  @@map("building")
+  @@map("buildings")
+}
+
+model TemperatureRecords {
+  id          Int       @id @default(autoincrement())
+  buildingId  Int
+  temperature Float
+  createdAt   DateTime  @default(now())
+  action      String
+  building    Building  @relation(fields: [buildingId], references: [id])
+
+  @@map("temperature_records")
 }
