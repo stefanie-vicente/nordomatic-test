@@ -1,12 +1,19 @@
-import { gql } from 'graphql-tag';
+import { gql } from "graphql-tag";
 
 export const buildingTypeDefs = gql`
+  type TemperatureRecord {
+    id: Int!
+    temperature: Float!
+    action: String!
+  }
+
   type Building {
     id: Int!
     name: String
     address: String!
-    currentTemperature: Float!              
-    temperatureScale: String!            
+    currentTemperature: Float!
+    temperatureScale: String!
+    temperatureRecords: [TemperatureRecord!]!
   }
 
   type Query {
@@ -15,8 +22,19 @@ export const buildingTypeDefs = gql`
   }
 
   type Mutation {
-    createBuilding(name: String, address: String!, currentTemperature: Float!, temperatureScale: String!): Building
-    updateBuilding(id: Int!, name: String, address: String, currentTemperature: Float, temperatureScale: String): Building
+    createBuilding(
+      name: String
+      address: String!
+      currentTemperature: Float!
+      temperatureScale: String!
+    ): Building
+    updateBuilding(
+      id: Int!
+      name: String
+      address: String
+      currentTemperature: Float
+      temperatureScale: String
+    ): Building
     deleteBuilding(id: Int!): Building
   }
 `;

@@ -32,7 +32,7 @@ model TemperatureRecords {
   temperature Float
   createdAt   DateTime  @default(now())
   action      String
-  building    Building  @relation(fields: [buildingId], references: [id])
+  building    Building  @relation(fields: [buildingId], references: [id], onDelete: Cascade)
 
   @@map("temperature_records")
 }
