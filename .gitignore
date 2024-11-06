@@ -1,0 +1,8 @@
+# OS files
+.DS_Store 
+
+# IDE/editor settings
+.vscode/
+
+# Ignore general temp or build files
+**/node_modules/
