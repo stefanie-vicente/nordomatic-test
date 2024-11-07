@@ -1,11 +1,14 @@
 import { gql } from "graphql-tag";
 
 export const buildingTypeDefs = gql`
+  scalar DateTime
+
   type TemperatureRecord {
     id: Int!
+    buildingId: Int!
     temperature: Float!
     action: String!
-    createdAt: String!
+    createdAt: DateTime!
   }
 
   type Building {
@@ -14,6 +17,8 @@ export const buildingTypeDefs = gql`
     address: String!
     currentTemperature: Float!
     temperatureScale: String!
+    createdAt: DateTime!
+    updatedAt: DateTime
     temperatureRecords: [TemperatureRecord!]!
   }
 
