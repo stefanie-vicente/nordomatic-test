@@ -47,6 +47,7 @@ export const buildingResolvers = {
             ],
           },
         },
+        include: { temperatureRecords: true },
       });
     },
 
@@ -64,7 +65,6 @@ export const buildingResolvers = {
 
       const existingBuilding = await prisma.building.findUnique({
         where: { id },
-        select: { currentTemperature: true },
       });
 
       if (!existingBuilding) {

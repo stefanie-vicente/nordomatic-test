@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,25 +8,25 @@ datasource db {
 }
 
 model Building {
-  id                  Int                  @id @default(autoincrement())
-  name                String?
-  address             String
-  currentTemperature  Float                
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  temperatureScale    String 
-  temperatureRecords  TemperatureRecords[]              
+  id                 Int                 @id @default(autoincrement())
+  name               String?
+  address            String
+  currentTemperature Float               @map("current_temperature")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  temperatureScale   String              @map("temperature_scale")
+  temperatureRecords TemperatureRecord[] 
 
   @@map("buildings")
 }
 
-model TemperatureRecords {
-  id          Int       @id @default(autoincrement())
-  buildingId  Int
-  temperature Float
-  createdAt   DateTime  @default(now())
-  action      String
-  building    Building  @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+model TemperatureRecord {
+  id           Int       @id @default(autoincrement())
+  buildingId   Int       @map("building_id")
+  temperature  Float
+  createdAt    DateTime  @default(now()) @map("created_at")
+  action       String
+  building     Building  @relation(fields: [buildingId], references: [id], onDelete: Cascade)
 
   @@map("temperature_records")
 }
