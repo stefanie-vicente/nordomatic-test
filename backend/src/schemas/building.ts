@@ -5,6 +5,7 @@ export const buildingTypeDefs = gql`
     id: Int!
     temperature: Float!
     action: String!
+    createdAt: String!
   }
 
   type Building {

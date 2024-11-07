@@ -1,21 +1,27 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Building } from "@prisma/client";
+import { TemperatureRecordAction } from "../types/temperatureRecordType";
 
 const prisma = new PrismaClient();
 
 export const buildingResolvers = {
   Query: {
-    buildings: async () => {
+    buildings: async (): Promise<Building[]> => {
       return await prisma.building.findMany({
         include: { temperatureRecords: true },
       });
     },
-    building: async (_: any, { id }: { id: number }) => {
+
+    building: async (
+      _: any,
+      { id }: { id: number }
+    ): Promise<Building | null> => {
       return await prisma.building.findUnique({
         where: { id },
         include: { temperatureRecords: true },
       });
     },
   },
+
   Mutation: {
     async createBuilding(
       _: unknown,
@@ -25,8 +31,10 @@ export const buildingResolvers = {
         currentTemperature: number;
         temperatureScale: string;
       }
-    ) {
+    ): Promise<Building> {
       const { name, address, currentTemperature, temperatureScale } = args;
+      const initialAction: TemperatureRecordAction = "Initial";
+
       return await prisma.building.create({
         data: {
           name,
@@ -34,7 +42,9 @@ export const buildingResolvers = {
           currentTemperature,
           temperatureScale,
           temperatureRecords: {
-            create: [{ temperature: currentTemperature, action: "initial" }],
+            create: [
+              { temperature: currentTemperature, action: initialAction },
+            ],
           },
         },
       });
@@ -48,10 +58,32 @@ export const buildingResolvers = {
         address?: string;
         currentTemperature?: number;
         temperatureScale?: string;
-        // temperatureAction?: string
       }
-    ) {
+    ): Promise<Building> {
       const { id, name, address, currentTemperature, temperatureScale } = args;
+
+      const existingBuilding = await prisma.building.findUnique({
+        where: { id },
+        select: { currentTemperature: true },
+      });
+
+      if (!existingBuilding) {
+        throw new Error(`Building with ID ${id} not found`);
+      }
+
+      let temperatureChangeAction: TemperatureRecordAction = "Maintained";
+
+      if (
+        currentTemperature &&
+        currentTemperature > existingBuilding.currentTemperature
+      ) {
+        temperatureChangeAction = "Increased";
+      } else if (
+        currentTemperature &&
+        currentTemperature < existingBuilding.currentTemperature
+      ) {
+        temperatureChangeAction = "Decreased";
+      }
 
       return await prisma.building.update({
         where: { id },
@@ -64,17 +96,20 @@ export const buildingResolvers = {
             temperatureRecords: {
               create: [
                 {
-                  temperature: currentTemperature, 
-                  action: "update",
+                  temperature: currentTemperature,
+                  action: temperatureChangeAction,
                 },
               ],
             },
           }),
         },
+        include: {
+          temperatureRecords: true,
+        },
       });
     },
 
-    async deleteBuilding(_: unknown, args: { id: number }) {
+    async deleteBuilding(_: unknown, args: { id: number }): Promise<Building> {
       const { id } = args;
 
       return await prisma.building.delete({
