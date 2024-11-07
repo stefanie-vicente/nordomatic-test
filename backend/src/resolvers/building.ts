@@ -109,12 +109,16 @@ export const buildingResolvers = {
       });
     },
 
-    async deleteBuilding(_: unknown, args: { id: number }): Promise<Building> {
-      const { id } = args;
-
-      return await prisma.building.delete({
-        where: { id },
-      });
+    async deleteBuilding(_: unknown, args: { id: number }): Promise<boolean> {
+      try {
+        await prisma.building.delete({
+          where: { id: args.id },
+        });
+        return true;
+      } catch (error) {
+        console.error("Error deleting building:", error);
+        return false;
+      }
     },
   },
 };

@@ -36,6 +36,6 @@ export const buildingTypeDefs = gql`
       currentTemperature: Float
       temperatureScale: String
     ): Building
-    deleteBuilding(id: Int!): Building
+    deleteBuilding(id: Int!): Boolean
   }
 `;
