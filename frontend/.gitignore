@@ -1,0 +1,8 @@
+# Next.js build output
+.next/
+
+# Next.js static files (if you're not using custom static folders)
+out/
+
+# Next.js configuration files
+next-env.d.ts
