@@ -3,6 +3,11 @@ import { gql } from "graphql-tag";
 export const buildingTypeDefs = gql`
   scalar DateTime
 
+  enum TemperatureScale {
+    Celsius
+    Fahrenheit
+  }
+
   type TemperatureRecord {
     id: Int!
     buildingId: Int!
@@ -16,10 +21,15 @@ export const buildingTypeDefs = gql`
     name: String
     address: String!
     currentTemperature: Float!
-    temperatureScale: String!
+    temperatureScale: TemperatureScale!
     createdAt: DateTime!
     updatedAt: DateTime
     temperatureRecords: [TemperatureRecord!]!
+  }
+
+  type DeleteReturn {
+    success: Boolean!
+    message: String!
   }
 
   type Query {
@@ -32,15 +42,15 @@ export const buildingTypeDefs = gql`
       name: String
       address: String!
       currentTemperature: Float!
-      temperatureScale: String!
+      temperatureScale: TemperatureScale!
     ): Building
     updateBuilding(
       id: Int!
       name: String
       address: String
       currentTemperature: Float
-      temperatureScale: String
+      temperatureScale: TemperatureScale
     ): Building
-    deleteBuilding(id: Int!): Boolean
+    deleteBuilding(id: Int!): DeleteReturn
   }
 `;
