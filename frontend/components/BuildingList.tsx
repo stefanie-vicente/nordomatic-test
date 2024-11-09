@@ -1,6 +1,9 @@
 import { useQuery } from "@apollo/client";
 import { GET_BUILDINGS } from "../graphql/buildingQueries";
 
+// clickable table, each row should be a building and when clicked should extend the row with the building detailed info and a edit button
+// that will redirect to the building edit page
+// create building button
 const BuildingList = () => {
   const { data, loading, error } = useQuery(GET_BUILDINGS);
 

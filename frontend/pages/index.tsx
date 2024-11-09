@@ -1,5 +1,5 @@
-import BuildingList from "@/components/BuildingList";
+// create just a simple home component with a button to the buildings page
 
-const HelloWorld = () => <BuildingList />;
+const HelloWorld = () => <h1>Hello, World!</h1>;
 
 export default HelloWorld;
