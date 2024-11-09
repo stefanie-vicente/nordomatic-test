@@ -1,4 +1,5 @@
 import { useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
 import {
   Box,
   Typography,
@@ -9,17 +10,16 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  // Button,
+  Button,
 } from "@mui/material";
 import { GET_BUILDING } from "@/graphql/buildingQueries";
 
-// add edit button
-// add go back to buildings list button
-const Building = () => {
+const Building = ({ id }: { id: number }) => {
+  const router = useRouter();
+
   const { data, loading, error } = useQuery(GET_BUILDING, {
-    variables: { id: 6 },
+    variables: { id },
   });
-  console.log(data);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -34,14 +34,25 @@ const Building = () => {
       <Typography variant="h6" color="textSecondary" gutterBottom>
         {building.address}
       </Typography>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => router.push("/buildings")}
+      >
+        Home
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => router.push(`/buildings/edit/${id}`)}
+      >
+        Edit
+      </Button>
       <Paper elevation={3} sx={{ padding: 2, marginBottom: 3 }}>
         <Typography variant="h6" gutterBottom>
           Current Temperature: {building.currentTemperature}°{" "}
           {building.temperatureScale}
         </Typography>
-        {/* <Button variant="contained" color="primary">
-          Update Temperature
-        </Button> */}
       </Paper>
       <Typography variant="h5" gutterBottom>
         Temperature Records

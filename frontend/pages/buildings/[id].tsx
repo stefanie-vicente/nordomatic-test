@@ -1,7 +1,11 @@
+import { useRouter } from "next/router";
 import Building from "@/components/Building";
 
 const BuildingPage = () => {
-  return <Building />;
+  const router = useRouter();
+  const { id } = router.query;
+
+  return <Building id={Number(id)} />;
 };
 
 export default BuildingPage;
