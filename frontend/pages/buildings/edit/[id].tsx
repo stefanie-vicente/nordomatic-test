@@ -1,2 +1,7 @@
-// redirect to the building page when saved
-// same component as the create page
+import BuildingForm from "@/components/BuildingForm";
+
+const EditBuilding = () => {
+  return <BuildingForm />;
+};
+
+export default EditBuilding;

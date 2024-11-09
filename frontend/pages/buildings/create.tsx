@@ -1,1 +1,7 @@
-// create and edit should be the same form component
+import BuildingForm from "@/components/BuildingForm";
+
+const CreateBuilding = () => {
+  return <BuildingForm />;
+};
+
+export default CreateBuilding;
