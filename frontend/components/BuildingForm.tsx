@@ -59,7 +59,8 @@ const BuildingForm = ({ building, type }: IBuildingFormProps) => {
               variables: { ...variables, id: building?.id },
             });
 
-      if (data) router.push(`/buildings/${data.id || building?.id}`);
+      if (data)
+        router.push(`/buildings/${data?.createBuilding?.id || building?.id}`);
     } catch (err) {
       console.error("Failed to submit building:", err);
     }
@@ -88,7 +89,6 @@ const BuildingForm = ({ building, type }: IBuildingFormProps) => {
           onChange={(e) => handleChange("name", e.target.value)}
           fullWidth
           variant="outlined"
-          required
         />
         <TextField
           label="Address"
