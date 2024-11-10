@@ -1,20 +1,25 @@
 import * as React from "react";
+import { useRouter } from "next/router";
 import {
-  Collapse,
   Box,
+  Collapse,
   IconButton,
-  Table,
-  TableBody,
   TableCell,
-  TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import {
+  KeyboardArrowDown,
+  KeyboardArrowUp,
+  Edit,
+  Delete,
+} from "@mui/icons-material";
 import { IBuilding } from "@/types/IBuilding";
 import TemperatureRecordsTable from "./TemperatureRecordsTable";
 
 const Row = (props: { building: IBuilding }) => {
+  const router = useRouter();
   const { building } = props;
   const [open, setOpen] = React.useState(false);
 
@@ -31,16 +36,37 @@ const Row = (props: { building: IBuilding }) => {
           </IconButton>
         </TableCell>
         <TableCell>
-          <Typography variant="body1">{building.name}</Typography>
+          <Typography variant="body1">{building?.name}</Typography>
         </TableCell>
         <TableCell>
-          <Typography variant="body1">{building.address}</Typography>
+          <Typography variant="body1">{building?.address}</Typography>
         </TableCell>
         <TableCell>
-          <Typography variant="body1">{building.currentTemperature}</Typography>
+          <Typography variant="body1">
+            {building?.currentTemperature}
+            {"° "}
+            {building?.temperatureScale}
+          </Typography>
         </TableCell>
         <TableCell>
-          <Typography variant="body1">{building.temperatureScale}</Typography>
+          <Tooltip title="Edit building">
+            <IconButton
+              aria-label="edit building"
+              size="small"
+              onClick={() => router.push(`/buildings/edit/${building?.id}`)}
+            >
+              <Edit />
+            </IconButton>
+          </Tooltip>
+          {/* <Tooltip title="Delete building">
+            <IconButton
+              aria-label="delete building"
+              size="small"
+              onClick={() => console.log(building)}
+            >
+              <Delete />
+            </IconButton>
+          </Tooltip> */}
         </TableCell>
       </TableRow>
       <TableRow>

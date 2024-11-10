@@ -28,9 +28,7 @@ const BuildingsListTable = ({ buildings }: { buildings: IBuilding[] }) => {
             <TableCell>
               <Typography variant="h6">Temperature</Typography>
             </TableCell>
-            <TableCell>
-              <Typography variant="h6">Scale</Typography>
-            </TableCell>
+            <TableCell />
           </TableRow>
         </TableHead>
         <TableBody>
