@@ -16,8 +16,6 @@ export const CREATE_BUILDING = gql`
       id
       name
       address
-      createdAt
-      updatedAt
       temperatureScale
       temperatureRecords {
         action
@@ -32,11 +30,13 @@ export const UPDATE_BUILDING = gql`
   mutation UpdateBuilding(
     $id: Int!
     $name: String
+    $address: String
     $currentTemperature: Float
   ) {
     updateBuilding(
       id: $id
       name: $name
+      address: $address
       currentTemperature: $currentTemperature
     ) {
       id

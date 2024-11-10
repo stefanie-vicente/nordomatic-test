@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "@apollo/client";
 import {
@@ -11,38 +11,74 @@ import {
   FormControl,
   Select,
   SelectChangeEvent,
+  Typography,
 } from "@mui/material";
-import { CREATE_BUILDING } from "@/graphql/buildingMutations";
+import { CREATE_BUILDING, UPDATE_BUILDING } from "@/graphql/buildingMutations";
+import { IBuilding } from "@/types/IBuilding";
 
-// make it an edit form also and block temperatureScale on edit
-const BuildingForm = () => {
+interface IBuildingFormProps {
+  building?: IBuilding;
+  type: "create" | "update";
+}
+
+const BuildingForm = ({ building, type }: IBuildingFormProps) => {
   const router = useRouter();
 
   const [name, setName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
-  const [currentTemperature, setCurrentTemperature] = useState<number>(0);
+  const [currentTemperature, setCurrentTemperature] = useState<number | string>(
+    ""
+  );
   const [temperatureScale, setTemperatureScale] = useState<string>("Celsius");
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setName(e.target.value);
-  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setAddress(e.target.value);
-  const handleTemperatureChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setCurrentTemperature(Number(e.target.value));
-  const handleTemperatureScaleChange = (e: SelectChangeEvent<string>) =>
-    setTemperatureScale(e.target.value);
+  useEffect(() => {
+    if (type === "update" && building) {
+      setName(building.name || "");
+      setAddress(building.address || "");
+      setCurrentTemperature(building.currentTemperature || "");
+      setTemperatureScale(building.temperatureScale || "Celsius");
+    }
+  }, [building, type]);
 
-  const [createBuilding, { loading, error }] = useMutation(CREATE_BUILDING);
+  const [createBuilding, { loading: loadingCreate, error: errorCreate }] =
+    useMutation(CREATE_BUILDING);
+  const [updateBuilding, { loading: loadingUpdate, error: errorUpdate }] =
+    useMutation(UPDATE_BUILDING);
+
+  const loading = loadingCreate || loadingUpdate;
+  const error = errorCreate || errorUpdate;
+
+  const handleChange = {
+    name: (e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value),
+    address: (e: React.ChangeEvent<HTMLInputElement>) =>
+      setAddress(e.target.value),
+    temperature: (e: React.ChangeEvent<HTMLInputElement>) =>
+      setCurrentTemperature(Number(e.target.value)),
+    scale: (e: SelectChangeEvent<string>) =>
+      setTemperatureScale(e.target.value),
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const { data } = await createBuilding({
-        variables: { name, address, currentTemperature, temperatureScale },
-      });
-      router.push(`/buildings/${data.createBuilding.id}`);
+      let buildingId: number | undefined;
+
+      if (type === "create") {
+        const { data } = await createBuilding({
+          variables: { name, address, currentTemperature, temperatureScale },
+        });
+        buildingId = data?.createBuilding?.id;
+      } else if (type === "update") {
+        buildingId = building?.id;
+        await updateBuilding({
+          variables: { id: buildingId, name, address, currentTemperature },
+        });
+      }
+
+      if (buildingId) router.push(`/buildings/${buildingId}`);
     } catch (err) {
-      console.error("Error creating building:", err);
+      // improve
+      console.error("Error creating/updating building:", err);
     }
   };
 
@@ -50,11 +86,17 @@ const BuildingForm = () => {
     <Box
       sx={{
         display: "flex",
+        flexDirection: "column",
         width: "60%",
-        margin: "auto",
         minHeight: "100vh",
+        margin: "auto",
+        justifyContent: "center",
+        gap: "20px",
       }}
     >
+      <Typography variant="h5">
+        {type === "create" ? "Create" : "Update"} Building
+      </Typography>
       <Paper
         component="form"
         onSubmit={handleSubmit}
@@ -63,46 +105,51 @@ const BuildingForm = () => {
           display: "flex",
           flexDirection: "column",
           width: "100%",
-          margin: "auto",
           padding: "50px",
           gap: "20px",
         }}
       >
         <TextField
-          label="Building Name"
+          label="Name"
           value={name}
-          onChange={handleNameChange}
+          onChange={handleChange.name}
           fullWidth
           variant="outlined"
-          required
         />
         <TextField
           label="Address"
           value={address}
-          onChange={handleAddressChange}
+          onChange={handleChange.address}
           fullWidth
           variant="outlined"
+          required={type === "create"}
         />
         <TextField
           label="Current Temperature"
           type="number"
           value={currentTemperature}
-          onChange={handleTemperatureChange}
+          onChange={handleChange.temperature}
           fullWidth
           variant="outlined"
-          required
+          required={type === "create"}
         />
-        <FormControl fullWidth variant="outlined">
-          <InputLabel>Temperature Scale</InputLabel>
-          <Select
-            value={temperatureScale}
-            onChange={handleTemperatureScaleChange}
-            label="Temperature Scale"
-          >
-            <MenuItem value="Celsius">Celsius</MenuItem>
-            <MenuItem value="Fahrenheit">Fahrenheit</MenuItem>
-          </Select>
-        </FormControl>
+        {type === "create" ? (
+          <FormControl fullWidth variant="outlined">
+            <InputLabel>Temperature Scale</InputLabel>
+            <Select
+              value={temperatureScale}
+              onChange={handleChange.scale}
+              label="Temperature Scale"
+            >
+              <MenuItem value="Celsius">Celsius</MenuItem>
+              <MenuItem value="Fahrenheit">Fahrenheit</MenuItem>
+            </Select>
+          </FormControl>
+        ) : (
+          <Typography>
+            Temperature Scale: {building?.temperatureScale}
+          </Typography>
+        )}
         <Button
           type="submit"
           variant="contained"
@@ -111,7 +158,7 @@ const BuildingForm = () => {
         >
           {loading ? "Submitting..." : "Save"}
         </Button>
-        {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
+        {error && <Typography color="error">Error: {error.message}</Typography>}
       </Paper>
     </Box>
   );
