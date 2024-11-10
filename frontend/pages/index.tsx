@@ -1,5 +1,12 @@
-// create just a simple home component with a button to the buildings page
+export async function getServerSideProps() {
+  return {
+    redirect: {
+      destination: "/buildings",
+      permanent: true,
+    },
+  };
+}
 
-const HelloWorld = () => <h1>Hello, World!</h1>;
-
-export default HelloWorld;
+export default function Home() {
+  return null;
+}
