@@ -1,5 +1,5 @@
-import BuildingList from "@/components/BuildingList";
+import BuildingsList from "@/components/BuildingsList";
 
-const Buildings = () => <BuildingList />;
+const Buildings = () => <BuildingsList />;
 
 export default Buildings;
