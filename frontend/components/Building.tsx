@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { Box } from "@mui/material";
 import { GET_BUILDING } from "@/graphql/buildingQueries";
 import { IBuilding } from "@/types/IBuilding";
-import BuildingTable from "./BuildingTable";
+import TemperatureRecordsTable from "./TemperatureRecordsTable";
 import BuildingHeader from "./BuildingHeader";
 
 const Building = ({ id }: { id: number }) => {
@@ -18,7 +18,7 @@ const Building = ({ id }: { id: number }) => {
   return (
     <Box sx={{ padding: 10 }}>
       <BuildingHeader building={building} />
-      <BuildingTable building={building} />
+      <TemperatureRecordsTable building={building} />
     </Box>
   );
 };
