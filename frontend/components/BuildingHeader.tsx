@@ -15,12 +15,14 @@ const BuildingHeader = ({ building }: { building: IBuilding }) => {
         gap: "20px",
       }}
     >
-      <Typography variant="h5">
-        {name} ({currentTemperature}°{temperatureScale})
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Typography variant="h5">
+          {name} ({currentTemperature}°{temperatureScale})
+        </Typography>
         <Typography variant="h6" color="textSecondary">
           {address}
         </Typography>
-      </Typography>
+      </Box>
       <Box
         sx={{
           display: "flex",
