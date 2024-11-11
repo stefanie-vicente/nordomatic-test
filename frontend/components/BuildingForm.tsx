@@ -1,10 +1,11 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "@apollo/client";
 import { Paper, TextField, Button, Box, Typography } from "@mui/material";
 import { CREATE_BUILDING, UPDATE_BUILDING } from "@/graphql/buildingMutations";
 import { IBuilding } from "@/types/IBuilding";
 import FormTemperatureFields from "./FormTemperatureFields";
+import BuildingFormActionsButtons from "./BuildingFormActionsButtons";
 
 interface IBuildingFormProps {
   building?: IBuilding;
@@ -104,15 +105,7 @@ const BuildingForm = ({ building, type }: IBuildingFormProps) => {
           type={type}
           handleChange={handleChange}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          disabled={loading}
-          sx={{ width: "fit-content", alignSelf: "end" }}
-        >
-          {loading ? "Submitting..." : "Save"}
-        </Button>
+        <BuildingFormActionsButtons id={building?.id} loading={loading} />
         {error && <Typography color="error">Error: {error.message}</Typography>}
       </Paper>
     </Box>

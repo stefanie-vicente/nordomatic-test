@@ -39,21 +39,17 @@ const FormTemperatureFields = ({
         variant="outlined"
         required
       />
-      {type === "create" ? (
-        <FormControl variant="outlined">
-          <InputLabel>Scale</InputLabel>
-          <Select
-            value={temperatureScale}
-            onChange={(e) => handleChange("temperatureScale", e.target.value)}
-            label="Temperature Scale"
-          >
-            <MenuItem value="Celsius">Celsius</MenuItem>
-            <MenuItem value="Fahrenheit">Fahrenheit</MenuItem>
-          </Select>
-        </FormControl>
-      ) : (
-        <Typography variant="h6">Scale: {temperatureScale}</Typography>
-      )}
+      <FormControl variant="outlined" disabled={type === "update"}>
+        <InputLabel>Scale</InputLabel>
+        <Select
+          value={temperatureScale}
+          onChange={(e) => handleChange("temperatureScale", e.target.value)}
+          label="Temperature Scale"
+        >
+          <MenuItem value="Celsius">Celsius</MenuItem>
+          <MenuItem value="Fahrenheit">Fahrenheit</MenuItem>
+        </Select>
+      </FormControl>
     </Box>
   );
 };
