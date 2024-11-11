@@ -8,11 +8,24 @@ export const buildingTypeDefs = gql`
     Fahrenheit
   }
 
+  enum TemperatureAction {
+    Increased
+    Decreased
+    Maintained
+    Initial
+  }
+
+  enum DeleteErrorCode {
+    NOT_FOUND
+    DATABASE_ERROR
+    UNEXPECTED_ERROR
+  }
+
   type TemperatureRecord {
     id: Int!
     buildingId: Int!
     temperature: Float!
-    action: String!
+    action: TemperatureAction!
     createdAt: DateTime!
   }
 
@@ -27,9 +40,12 @@ export const buildingTypeDefs = gql`
     temperatureRecords: [TemperatureRecord!]!
   }
 
-  type DeleteReturn {
+  type DeleteResponse {
     success: Boolean!
     message: String!
+    id: Int
+    operation: String
+    errorCode: DeleteErrorCode
   }
 
   type Query {
@@ -51,6 +67,6 @@ export const buildingTypeDefs = gql`
       currentTemperature: Float
       temperatureScale: TemperatureScale
     ): Building
-    deleteBuilding(id: Int!): DeleteReturn
+    deleteBuilding(id: Int!): DeleteResponse
   }
 `;
