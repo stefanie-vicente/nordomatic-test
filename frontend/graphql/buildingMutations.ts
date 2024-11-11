@@ -52,3 +52,12 @@ export const UPDATE_BUILDING = gql`
     }
   }
 `;
+
+export const DELETE_BUILDING = gql`
+  mutation DeleteBuilding($id: Int!) {
+    deleteBuilding(id: $id) {
+      success
+      message
+    }
+  }
+`;

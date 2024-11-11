@@ -4,6 +4,7 @@ import { GET_BUILDING } from "@/graphql/buildingQueries";
 import { IBuilding } from "@/types/IBuilding";
 import TemperatureRecordsTable from "./TemperatureRecordsTable";
 import BuildingHeader from "./BuildingHeader";
+import BuildingActionsButtons from "./BuildingActionsButtons";
 
 const Building = ({ id }: { id: number }) => {
   const { data, loading, error } = useQuery(GET_BUILDING, {
@@ -19,6 +20,7 @@ const Building = ({ id }: { id: number }) => {
     <Box sx={{ padding: 10 }}>
       <BuildingHeader building={building} />
       <TemperatureRecordsTable building={building} />
+      <BuildingActionsButtons id={building.id} />
     </Box>
   );
 };

@@ -23,29 +23,13 @@ const BuildingHeader = ({ building }: { building: IBuilding }) => {
           {address}
         </Typography>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          gap: "10px",
-          height: "50%",
-        }}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => router.push("/buildings")}
       >
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => router.push(`/buildings/edit/${id}`)}
-        >
-          Edit
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => router.push("/buildings")}
-        >
-          Home
-        </Button>
-      </Box>
+        Home
+      </Button>
     </Box>
   );
 };
