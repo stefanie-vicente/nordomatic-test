@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import {
   Box,
@@ -16,12 +17,43 @@ import {
   Delete,
 } from "@mui/icons-material";
 import { IBuilding } from "@/types/IBuilding";
+import { DELETE_BUILDING } from "@/graphql/buildingMutations";
 import TemperatureRecordsTable from "./TemperatureRecordsTable";
+import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
+interface IRowProps {
+  building: IBuilding;
+  onDelete: (id: number) => void;
+}
 
-const Row = (props: { building: IBuilding }) => {
+const Row = ({ building, onDelete }: IRowProps) => {
   const router = useRouter();
-  const { building } = props;
-  const [open, setOpen] = React.useState(false);
+  const [deleteBuilding, { loading, error }] = useMutation(DELETE_BUILDING);
+
+  const [open, setOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+
+  const handleDeleteButtonClick = (id: number) => {
+    setDeleteId(id);
+    setOpenDialog(true);
+  };
+
+  const confirmDelete = async () => {
+    if (deleteId) {
+      try {
+        await deleteBuilding({ variables: { id: deleteId } });
+        onDelete(deleteId);
+      } catch (error) {
+        console.error("Error deleting building", error);
+      } finally {
+        setOpenDialog(false);
+      }
+    }
+  };
+
+  const cancelDelete = () => {
+    setOpenDialog(false);
+  };
 
   return (
     <>
@@ -44,8 +76,7 @@ const Row = (props: { building: IBuilding }) => {
         <TableCell>
           <Typography variant="body1">
             {building?.currentTemperature}
-            {"° "}
-            {building?.temperatureScale}
+            {"°"} {building?.temperatureScale}
           </Typography>
         </TableCell>
         <TableCell>
@@ -58,15 +89,20 @@ const Row = (props: { building: IBuilding }) => {
               <Edit />
             </IconButton>
           </Tooltip>
-          {/* <Tooltip title="Delete building">
+          <Tooltip title="Delete building">
             <IconButton
               aria-label="delete building"
               size="small"
-              onClick={() => console.log(building)}
+              onClick={() => handleDeleteButtonClick(building?.id)}
             >
               <Delete />
             </IconButton>
-          </Tooltip> */}
+          </Tooltip>
+          <DeleteConfirmationDialog
+            openDialog={openDialog}
+            cancelDelete={cancelDelete}
+            confirmDelete={confirmDelete}
+          />
         </TableCell>
       </TableRow>
       <TableRow>
