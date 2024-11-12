@@ -1,101 +1,211 @@
 # Backend
 
-This is the backend project for managing data and GraphQL API for a Building temperature managment application. It uses **Apollo Server** for GraphQL API, **Prisma** as the ORM, and **SQLite** as the database. The project is developed using **TypeScript**.
+This project is a backend server that uses **Apollo Server** for handling GraphQL requests, **Prisma** for database management, and **SQLite** as the database engine. The server is written in **TypeScript** and includes various scripts for managing development, migrations, testing, and seeding the database.
 
 ## Table of Contents
+
 - [Backend](#backend)
   - [Table of Contents](#table-of-contents)
-  - [Requirements](#requirements)
   - [Installation](#installation)
   - [Scripts](#scripts)
-  - [Database Management](#database-management)
-  - [Technologies](#technologies)
+    - [Development](#development)
+    - [Build](#build)
+    - [Prisma Migrations](#prisma-migrations)
+    - [Seeding](#seeding)
+    - [Testing](#testing)
+  - [Environment Configuration](#environment-configuration)
+  - [Database](#database)
+    - [Seeding](#seeding-1)
+  - [Testing](#testing-1)
+  - [Development](#development-1)
+  - [Production](#production)
   - [License](#license)
-
-## Requirements
-
-To run this project, make sure you have the following installed:
-- Node.js (>=16.x.x)
-- npm or yarn (>=7.x.x)
 
 ## Installation
 
-Clone this repository and navigate into the project directory:
+1. Clone the repository:
 
-```bash
-git clone https://github.com/stefanie-vicente/nordomatic-test.git
-cd backend
-```
+   ```bash
+   git clone https://github.com/stefanie-vicente/nordomatic-test.git
+   ```
 
-Then install the required dependencies:
+2. Navigate to the project directory:
 
-```bash
-npm install
-```
+   ```bash
+   cd backend
+   ```
+
+3. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Ensure that you have **Prisma** and **SQLite** set up for your project. The database is set up via **Prisma** migrations, which you can run with the provided scripts.
 
 ## Scripts
 
-You can use the following npm scripts for various tasks during development:
+The following npm scripts are available for use:
 
-- **`dev`**: Starts the server in development mode using `nodemon` and `ts-node`. The server automatically restarts on file changes.
+### Development
+
+- **`npm run dev`**: Runs the server in development mode with hot-reloading using **`nodemon`** and **`ts-node`**.
+
   ```bash
   npm run dev
   ```
 
-- **`build`**: Compiles the TypeScript code to JavaScript using `tsc` and stores it in the `dist` directory.
+  This will start the server and automatically restart it whenever changes are made to the `src` directory.
+
+### Build
+
+- **`npm run build`**: Compiles the TypeScript code into JavaScript using **`tsc`**.
+
   ```bash
   npm run build
   ```
 
-- **`prisma:migrate`**: Runs the Prisma migrations for the database. Use this whenever there are new migrations.
+  This will generate compiled files in the `dist` folder.
+
+### Prisma Migrations
+
+- **`npm run prisma:migrate`**: Runs Prisma migration in **development** mode.
+
   ```bash
   npm run prisma:migrate
   ```
 
-- **`prisma:generate`**: Regenerates the Prisma client, which is necessary if there are any schema changes.
+- **`npm run prisma:generate`**: Generates Prisma Client based on the schema.
+
   ```bash
   npm run prisma:generate
   ```
 
-- **`prisma:reset`**: Resets the database by applying all migrations from scratch. Use this with caution, as it will delete existing data.
+- **`npm run prisma:reset`**: Resets the database, re-applies migrations, and skips seeding.
+
   ```bash
   npm run prisma:reset
   ```
 
-## Database Management
+### Seeding
 
-This project uses **SQLite** as the database for easy setup. **Prisma** is configured to handle database migrations and data access.
+- **`npm run seed`**: Seeds the database with initial data using **`ts-node`**.
 
-To create or update the database schema, use the following commands:
+  ```bash
+  npm run seed
+  ```
 
-1. **Generate Migration Files**:
+  This runs a `prisma/seed.ts` file to populate the database with test or initial data.
+
+### Testing
+
+- **`npm run test`**: Runs tests using **Jest** with the test database.
+
+  ```bash
+  npm run test
+  ```
+
+  This runs Jest in the test environment with a separate test database.
+
+- **`npm run test:reset`**: Resets the database and runs tests after reapplying migrations.
+
+  ```bash
+  npm run test:reset
+  ```
+
+  This is useful for running tests in an isolated environment after a fresh migration.
+
+## Environment Configuration
+
+Make sure to set up your environment variables for different environments (development, test, production). This is typically done through a `.env` file in the project root.
+
+Example `.env` file:
+
+```env
+DATABASE_URL="file:./dev.db"
+NODE_ENV=development
+```
+
+In the **test environment**, the `DATABASE_URL` will point to a test database (e.g., `file:./test.db`) to avoid polluting your development database.
+
+## Database
+
+This project uses **Prisma** for database management with **SQLite** as the database engine. The schema is defined in the `prisma/schema.prisma` file.
+
+To apply migrations:
+
+1. Run:
+
    ```bash
    npm run prisma:migrate
    ```
 
-2. **Generate Prisma Client**:
+2. To generate Prisma Client after migrations are applied:
+
    ```bash
    npm run prisma:generate
    ```
 
-3. **Reset the Database** (drops all tables and re-applies migrations):
+### Seeding
+
+To seed the database with sample data:
+
+```bash
+npm run seed
+```
+
+This will populate the database with initial data defined in `prisma/seed.ts`.
+
+## Testing
+
+The project uses **Jest** for testing, along with **Supertest** for HTTP assertions. 
+
+To run the tests:
+
+```bash
+npm run test
+```
+
+Tests are executed against a test database defined in the `.env` file.
+
+To reset the database and rerun tests:
+
+```bash
+npm run test:reset
+```
+
+## Development
+
+1. **Start the development server** using:
+
    ```bash
-   npm run prisma:reset
+   npm run dev
    ```
 
-## Technologies
+   This will start the server on **http://localhost:4000** (or any other port specified).
 
-The following main technologies are used in this project:
+2. During development, the **GraphQL Playground** will be available for testing queries and mutations. Make sure `NODE_ENV` is set to `development` for this feature to be enabled.
 
-- **[Apollo Server](https://www.apollographql.com/docs/apollo-server/)**: A GraphQL server that is responsible for handling GraphQL requests and responses.
-- **[Prisma](https://www.prisma.io/)**: An ORM for database management and migrations, enabling seamless interaction with the SQLite database.
-- **[SQLite](https://www.sqlite.org/index.html)**: A lightweight, serverless SQL database engine.
-- **[TypeScript](https://www.typescriptlang.org/)**: TypeScript is used for type safety and modern JavaScript features.
-- **[Nodemon](https://nodemon.io/)**: A tool that helps develop Node.js applications by automatically restarting the application when file changes in the directory are detected.
+## Production
+
+For production use, you should build and start the server:
+
+1. **Build the application**:
+
+   ```bash
+   npm run build
+   ```
+
+2. **Start the server**:
+
+   After building, you can start the server:
+
+   ```bash
+   node dist/server.js
+   ```
+
+Make sure to set `NODE_ENV` to `production` in your production environment for better performance and security.
 
 ## License
 
-This project is licensed under the ISC License. 
-
----
-
+This project is licensed under the **ISC** License.
