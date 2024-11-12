@@ -7,11 +7,11 @@
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "module": "commonjs",  // Change this from "esnext" to "commonjs" for Jest compatibility
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",  // Change from "preserve" to "react-jsx" for proper JSX transformation
     "incremental": true,
     "plugins": [
       {
