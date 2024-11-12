@@ -1,10 +1,8 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { useRouter } from "next/router";
-import { useMutation } from "@apollo/client";
-import BuildingForm from "@/components/BuildingForm";
 import { CREATE_BUILDING, UPDATE_BUILDING } from "@/graphql/buildingMutations";
-import { IBuilding } from "@/types/IBuilding";
+import { mockBuilding, mockBuilding2 } from "./mocks/buildings";
+import BuildingForm from "@/components/BuildingForm";
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
@@ -48,18 +46,10 @@ describe("BuildingForm", () => {
   });
 
   it("renders the form fields correctly for update", () => {
-    const building: IBuilding = {
-      id: 1,
-      name: "Building A",
-      address: "123 Main St",
-      currentTemperature: 20,
-      temperatureScale: "Celsius",
-      temperatureRecords: [],
-    };
-    render(<BuildingForm type="update" building={building} />);
+    render(<BuildingForm type="update" building={mockBuilding} />);
 
     expect(screen.getByLabelText(/name/i)).toHaveValue("Building A");
-    expect(screen.getByLabelText(/address/i)).toHaveValue("123 Main St");
+    expect(screen.getByLabelText(/address/i)).toHaveValue("123 Street");
     expect(
       screen.getByRole("heading", { name: /update building/i })
     ).toBeInTheDocument();
@@ -81,7 +71,7 @@ describe("BuildingForm", () => {
 
   it("calls createBuilding mutation on form submit for creation", async () => {
     mockCreateBuilding.mockResolvedValueOnce({
-      data: { createBuilding: { id: "1" } },
+      data: { createBuilding: { id: 1 } },
     });
 
     render(<BuildingForm type="create" />);
@@ -93,7 +83,7 @@ describe("BuildingForm", () => {
       target: { value: "456 Elm St" },
     });
     fireEvent.change(screen.getByLabelText(/current temperature/i), {
-      target: { value: "22" },
+      target: { value: 22 },
     });
 
     fireEvent.click(screen.getByLabelText("save building"));
@@ -115,20 +105,11 @@ describe("BuildingForm", () => {
   });
 
   it("calls updateBuilding mutation on form submit for update", async () => {
-    const building: IBuilding = {
-      id: 2,
-      name: "Old Building",
-      address: "789 Oak St",
-      currentTemperature: 25,
-      temperatureScale: "Celsius",
-      temperatureRecords: [],
-    };
-
     mockUpdateBuilding.mockResolvedValueOnce({
-      data: { updateBuilding: { id: "2" } },
+      data: { updateBuilding: { id: 2 } },
     });
 
-    render(<BuildingForm type="update" building={building} />);
+    render(<BuildingForm type="update" building={mockBuilding2} />);
 
     fireEvent.change(screen.getByLabelText(/name/i), {
       target: { value: "Updated Building" },

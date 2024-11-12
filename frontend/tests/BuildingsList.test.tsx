@@ -12,10 +12,10 @@ jest.mock("@/components/BuildingsListTable", () => {
 
 describe("BuildingsList Component", () => {
   const mockRouterPush = jest.fn();
+  (useRouter as jest.Mock).mockReturnValue({ push: mockRouterPush });
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (useRouter as jest.Mock).mockReturnValue({ push: mockRouterPush });
   });
 
   it("renders the BuildingsList component structure", () => {

@@ -10,6 +10,15 @@ export const mockBuilding: IBuilding = {
   temperatureRecords: [],
 };
 
+export const mockBuilding2: IBuilding = {
+  id: 2,
+  name: "Old Building",
+  address: "789 Oak St",
+  currentTemperature: 25,
+  temperatureScale: "Celsius",
+  temperatureRecords: [],
+};
+
 export const mockRequest = [
   {
     request: {

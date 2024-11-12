@@ -1,18 +1,20 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { MockedProvider } from "@apollo/client/testing";
-import Row from "@/components/BuildingsListTableRow"; // Adjust the import path if necessary
 import { mockBuilding, mockRequest } from "./mocks/buildings";
+import Row from "@/components/BuildingsListTableRow";
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
 
 describe("Row Component", () => {
+  (require("next/router").useRouter as jest.Mock).mockReturnValue({
+    push: jest.fn(),
+  });
+
   beforeEach(() => {
-    (require("next/router").useRouter as jest.Mock).mockReturnValue({
-      push: jest.fn(),
-    });
+    jest.clearAllMocks();
   });
 
   it("renders the building information", () => {
