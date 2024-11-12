@@ -60,7 +60,7 @@ const Row = ({ building, onDelete }: IRowProps) => {
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell>
           <IconButton
-            aria-label="expand row"
+            aria-label={open ? "contract row" : "expand row"}
             size="small"
             onClick={() => setOpen(!open)}
           >
@@ -75,8 +75,7 @@ const Row = ({ building, onDelete }: IRowProps) => {
         </TableCell>
         <TableCell>
           <Typography variant="body1">
-            {building?.currentTemperature}
-            {"°"} {building?.temperatureScale}
+            {`${building?.currentTemperature}°${building?.temperatureScale}`}
           </Typography>
         </TableCell>
         <TableCell>
