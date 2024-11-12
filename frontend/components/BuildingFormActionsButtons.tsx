@@ -1,9 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/router";
-import { useMutation } from "@apollo/client";
 import { Box, Button } from "@mui/material";
-import { DELETE_BUILDING } from "@/graphql/buildingMutations";
-import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 
 const BuildingActionsButtons = ({
   id,

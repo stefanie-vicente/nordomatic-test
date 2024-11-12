@@ -6,7 +6,6 @@ import {
   InputLabel,
   FormControl,
   Select,
-  Typography,
 } from "@mui/material";
 
 interface FormTemperatureFieldsProps {

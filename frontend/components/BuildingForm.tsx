@@ -1,7 +1,7 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "@apollo/client";
-import { Paper, TextField, Button, Box, Typography } from "@mui/material";
+import { Paper, TextField, Box, Typography } from "@mui/material";
 import { CREATE_BUILDING, UPDATE_BUILDING } from "@/graphql/buildingMutations";
 import { IBuilding } from "@/types/IBuilding";
 import FormTemperatureFields from "./FormTemperatureFields";

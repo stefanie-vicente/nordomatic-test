@@ -20,6 +20,8 @@ import { IBuilding } from "@/types/IBuilding";
 import { DELETE_BUILDING } from "@/graphql/buildingMutations";
 import TemperatureRecordsTable from "./TemperatureRecordsTable";
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
+import { Error } from "./helpers";
+
 interface IRowProps {
   building: IBuilding;
   onDelete: (id: number) => void;
@@ -27,7 +29,7 @@ interface IRowProps {
 
 const Row = ({ building, onDelete }: IRowProps) => {
   const router = useRouter();
-  const [deleteBuilding, { loading, error }] = useMutation(DELETE_BUILDING);
+  const [deleteBuilding, { error }] = useMutation(DELETE_BUILDING);
 
   const [open, setOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
@@ -37,6 +39,8 @@ const Row = ({ building, onDelete }: IRowProps) => {
     setDeleteId(id);
     setOpenDialog(true);
   };
+
+  if (error) return <Error message={error.message} />;
 
   const confirmDelete = async () => {
     if (deleteId) {

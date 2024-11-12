@@ -4,7 +4,7 @@ import { IBuilding } from "@/types/IBuilding";
 
 const BuildingHeader = ({ building }: { building: IBuilding }) => {
   const router = useRouter();
-  const { id, name, currentTemperature, temperatureScale, address } = building;
+  const { name, currentTemperature, temperatureScale, address } = building;
   return (
     <Box
       sx={{

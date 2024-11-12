@@ -8,7 +8,7 @@ import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 const BuildingActionsButtons = ({ id }: { id: number }) => {
   const router = useRouter();
 
-  const [deleteBuilding, { loading, error }] = useMutation(DELETE_BUILDING);
+  const [deleteBuilding] = useMutation(DELETE_BUILDING);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
