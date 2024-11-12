@@ -33,6 +33,7 @@ const BuildingActionsButtons = ({
       }}
     >
       <Button
+        aria-label="save building"
         type="submit"
         variant="contained"
         color="primary"
