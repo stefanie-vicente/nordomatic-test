@@ -10,6 +10,8 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
+ENV NEXT_PUBLIC_GRAPHQL_API_URL=http://localhost:4000
+
 # Copy the rest of the application files
 COPY . .
 

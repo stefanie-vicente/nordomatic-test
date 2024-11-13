@@ -5,7 +5,7 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
 
   frontend:
     build:
@@ -13,4 +13,4 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_BACKEND_URL=http://backend:4000 # Backend URL in the Docker network
+      - NEXT_PUBLIC_GRAPHQL_API_URL=http://backend:4000
